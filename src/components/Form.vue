@@ -1,6 +1,6 @@
 <template>
   <div class="current-form">
-    <File/>
+    <File :multiple="true" v-model="files" caption="Вложения:" width="300"></File>
   </div>
 </template>
 
@@ -8,7 +8,17 @@
 import File from './File.vue'
 export default {
   name: 'Form',
-  components: { File }
+  data: function () {
+    return {
+      files: null
+    }
+  },
+  components: { File },
+  methods: {
+    save: function () {
+
+    }
+  }
 }
 </script>
 

@@ -19,6 +19,6 @@ export default {
   .main-content {
     display: flex;
     flex: 1 1 35vw;
-    height: 100vh;
+    height: 100%
   }
 </style>
