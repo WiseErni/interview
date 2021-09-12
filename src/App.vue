@@ -1,7 +1,7 @@
 <template>
   <div id="mainContent" class="main-content">
     <MainMenu/>
-    <Form/>
+    <Form id="1"/>
   </div>
 </template>
 

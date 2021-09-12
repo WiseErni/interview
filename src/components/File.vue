@@ -2,11 +2,13 @@
   <div class="file" :style="cssProps">
     <p v-if="caption" class="caption">{{caption}}</p>
     <div class="file-value">
-      <FileLink v-for="file in filesList" v-bind:key="file.id" v-bind:fileName="file.name"></FileLink>
+      <FileLink v-for="(file, index) in value" v-bind:key="file.name + index" v-bind:fileName="file.name">
+        <span v-if="index !== value.length - 1 ">;</span>
+      </FileLink>
     </div>
     <label class="file-select-button">
       <img src="../../public/paperclip.png" alt="Выбор" class="file-select-image"/>
-      <input type="file" :multiple="multiple" class="file-select-dialog" @change="handleFileChange">
+      <input type="file" class="file-select-dialog" @change="handleFileChange">
     </label>
   </div>
 </template>
@@ -17,14 +19,6 @@ export default {
   name: 'File',
   props: ['value', 'multiple', 'caption', 'width'],
   computed: {
-    filesList: function () {
-      const filesArray = []
-      const files = this.value || []
-      for (let i = 0; i < files.length; i++) {
-        filesArray.push(Object.assign(files[i], { id: 'virtual'+ i }))
-      }
-      return filesArray
-    },
     cssProps: function () {
       return {
         '--control-width': this.width + 'pt'
@@ -33,7 +27,13 @@ export default {
   },
   methods: {
     handleFileChange: function (event) {
-      this.$emit('input', event.target.files)
+      const selectedFile = event.target.files[0]
+      console.log(selectedFile)
+      if (this.multiple) {
+        this.$emit('input', this.value.concat([selectedFile]))
+      } else {
+        this.$emit('input', [selectedFile])
+      }
     }
   },
   components: {FileLink}
@@ -57,6 +57,7 @@ export default {
   flex-wrap: wrap;
   align-self: flex-start;
   overflow: hidden;
+  align-items: flex-start;
 }
 
 .caption {
@@ -72,7 +73,6 @@ export default {
 
 .file > div {
   display: flex;
-  align-items: center;
   flex-direction: row;
 }
 
