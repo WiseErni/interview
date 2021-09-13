@@ -1,7 +1,11 @@
 <template>
   <div class="current-form">
-    <input type="button" @click="save" value="Сохранить" style="height: 1.5em">
-    <File v-model="files" caption="Вложения:" width="300" multiple="true"></File>
+    <div class="toolbar">
+      <input type="button" class="toolbar-button" @click="save" value="Сохранить"/>
+    </div>
+    <div class="form-controls">
+      <File v-model="files" caption="Вложения:" width="300" multiple="true"></File>
+    </div>
   </div>
 </template>
 
@@ -44,6 +48,24 @@ export default {
   .current-form {
     display: flex;
     flex: 1 1 25vw;
-    border: aqua solid;
+    border: #bfc0da solid;
+    flex-direction: column;
+  }
+
+  .toolbar {
+    display: flex;
+    width: 100%;
+  }
+
+  .toolbar > * {
+    margin: 5pt;
+  }
+
+  .toolbar-button {
+    height: 2em;
+  }
+
+  .form-controls {
+    display: flex;
   }
 </style>

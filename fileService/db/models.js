@@ -26,7 +26,7 @@ File.init({
     type: DataTypes.STRING
   },
   content: {
-    type: DataTypes.BLOB
+    type: DataTypes.BLOB('long')
   },
   document: {
     type: DataTypes.INTEGER,

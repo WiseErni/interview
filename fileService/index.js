@@ -15,7 +15,7 @@ const _loadModel = async function (id) {
   })
 }
 
-const _saveModel = async function ({ id, files = [] }) {
+const _saveFiles = async function ({ id, files = [] }) {
   const _fArray = []
   for (let name of Object.keys(files)) {
     _fArray.push({
@@ -25,6 +25,7 @@ const _saveModel = async function ({ id, files = [] }) {
     })
   }
 
+  await sequelize.models.File.destroy({where: { document: id }})
   return await sequelize.models.File.bulkCreate(_fArray)
 }
 
@@ -35,9 +36,9 @@ const server = http.createServer(async (req, res) => {
   const _checkId = url.match(/(?<=\/document\/)(\d*)/i) || []
   const docId = _checkId[0]
   if (docId) {
-    if (method === 'GET') {
-      const record = await _loadModel(docId)
+    const record = await _loadModel(docId)
 
+    if (method === 'GET') {
       if (record) {
         res.statusCode = 200
         res.setHeader('Content-Type', 'text/json')
@@ -56,23 +57,10 @@ const server = http.createServer(async (req, res) => {
           res.end()
         }
 
-        await _saveModel({ id: docId, files })
+        await _saveFiles({ id: docId, files })
         res.statusCode = 200
         res.end()
       })
-      // const _filesChunks = []
-      // console.debug(req.body)
-      // req.on('data', function (chunk) {
-      //   _filesChunks.push(chunk)
-      // })
-      // req.on('end', async function () {
-      //   console.debug(Buffer.concat(_filesChunks))
-      //
-      //
-      //
-      //
-      //
-      // })
     } else {
       res.statusCode = 405
       res.end()

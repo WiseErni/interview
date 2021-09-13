@@ -1,7 +1,7 @@
 <template>
   <label class="file-link-container">
-    <span class="file-link" v-on:click="downloadFile">{{ fileName }}</span>
-    <img class="file-remove-button" src="../../public/remove.png" alt="X"/>
+    <a class="file-link" v-bind:href="url" v-bind:download="this.file.name">{{ file.name }}</a>
+    <img class="file-remove-button" src="../../public/remove.png" alt="X" @click="removeFile"/>
     <slot></slot>
   </label>
 </template>
@@ -9,11 +9,15 @@
 <script>
 export default {
   name: 'FileLink',
-  props: ['fileName'],
+  props: ['file', 'index'],
+  computed: {
+    url () {
+      return window.URL.createObjectURL(new Blob([this.file], { type: 'application/octet-stream' }))
+    }
+  },
   methods: {
-    downloadFile () {
-      console.log('Will download!')
-      return false
+    removeFile() {
+      this.$emit('remove-file', this.index)
     }
   }
 }
@@ -36,5 +40,9 @@ export default {
 .file-remove-button {
   width: 0.8em;
   height: 0.8em;
+}
+
+.file-remove-button:hover {
+  background-color: #d38184;
 }
 </style>

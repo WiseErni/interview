@@ -14,7 +14,7 @@ export default {
 .main-menu {
   display: flex;
   flex: 1 1 25vw;
-  border: aquamarine solid;
+  border: #bfc0da solid;
   max-width: 25vw;
   margin-right: 5pt;
 }

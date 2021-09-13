@@ -2,7 +2,11 @@
   <div class="file" :style="cssProps">
     <p v-if="caption" class="caption">{{caption}}</p>
     <div class="file-value">
-      <FileLink v-for="(file, index) in value" v-bind:key="file.name + index" v-bind:fileName="file.name">
+      <FileLink v-for="(file, index) in value"
+                v-bind:index="index"
+                v-bind:key="file.name + index"
+                v-bind:file="file"
+                v-on:remove-file="removeFile">
         <span v-if="index !== value.length - 1 ">;</span>
       </FileLink>
     </div>
@@ -34,6 +38,9 @@ export default {
       } else {
         this.$emit('input', [selectedFile])
       }
+    },
+    removeFile(index) {
+      this.value.splice(index, 1)
     }
   },
   components: {FileLink}
