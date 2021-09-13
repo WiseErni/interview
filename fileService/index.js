@@ -1,5 +1,6 @@
 const http = require('http')
 const formidable = require('formidable')
+const { Op } = require('sequelize')
 const sequelize = require('./db/models.js')
 const fs = require('fs')
 
@@ -22,13 +23,13 @@ async function _loadFile (fileId) {
   })
 }
 
-const _saveFiles = async function ({ id, files = {} }) {
+const _saveFiles = async function ({ id, newFiles = {}, restFiles = [] }) {
   const _compileFiles = new Promise(async (resolve) => {
     const _fArray = []
 
-    for (let name of Object.keys(files)) {
+    for (let name of Object.keys(newFiles)) {
       let chunks = ''
-      const read = fs.createReadStream(files[name].path)
+      const read = fs.createReadStream(newFiles[name].path)
       const _readPromise = new Promise(resolve => {
         read.on('data', (chunk) => {
           chunks += chunk
@@ -39,10 +40,10 @@ const _saveFiles = async function ({ id, files = {} }) {
       })
       await _readPromise
       _fArray.push({
-        name: files[name].name,
-        size: files[name].size,
+        name: newFiles[name].name,
+        size: newFiles[name].size,
         content: Buffer.from(chunks),
-        type: files[name].type,
+        type: newFiles[name].type,
         document: id
       })
     }
@@ -50,7 +51,17 @@ const _saveFiles = async function ({ id, files = {} }) {
   })
   const _files = await _compileFiles
 
-  await sequelize.models.File.destroy({where: { document: id }})
+  await sequelize.models.File.destroy({
+    where: {
+      document: id,
+      id: {
+        [Op.notIn]: restFiles.reduce((acc, fileInfo) => {
+          acc.push(fileInfo.id)
+          return acc
+        }, [])
+      }
+    }
+  })
   return await sequelize.models.File.bulkCreate(_files)
 }
 
@@ -75,7 +86,8 @@ async function processDoc (req, res, method, docId) {
         res.end()
       }
 
-      await _saveFiles({ id: docId, files })
+      const restFiles = Object.values(fields).map(fieldInfo => JSON.parse(fieldInfo))
+      await _saveFiles({ id: docId, newFiles: files, restFiles })
       res.statusCode = 200
       res.end()
     })

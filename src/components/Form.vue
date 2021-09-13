@@ -30,7 +30,7 @@ export default {
     },
     save () {
       const body = new FormData()
-      this.files.forEach(file => body.append(file.name, file))
+      this.files.forEach(file => body.append(file.name, file.id ? JSON.stringify(file) : file))
       console.debug(body)
       fetch(`http://localhost:3420/document/${this.id}`, { method: 'POST', body })
     }
