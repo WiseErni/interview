@@ -12,7 +12,11 @@ export default {
   props: ['file', 'index'],
   computed: {
     url () {
-      return window.URL.createObjectURL(new Blob([this.file], { type: 'application/octet-stream' }))
+      if (this.file.id) {
+        return `http://localhost:3420/file/${this.file.id}`
+      } else {
+        return window.URL.createObjectURL(new Blob([this.file], { type: this.file.type }))
+      }
     }
   },
   methods: {

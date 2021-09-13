@@ -28,6 +28,12 @@ File.init({
   content: {
     type: DataTypes.BLOB('long')
   },
+  type: {
+    type: DataTypes.STRING
+  },
+  size: {
+    type: DataTypes.BIGINT
+  },
   document: {
     type: DataTypes.INTEGER,
     references: {

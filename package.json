@@ -10,7 +10,7 @@
     "serve": "webpack serve"
   },
   "dependencies": {
-    "formidable": "^1.2.2",
+    "formidable": "^2.0.0-canary.20200504.1",
     "sequelize": "^6.6.5",
     "sqlite3": "^5.0.2",
     "vue": "^2.6.14",
