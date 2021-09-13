@@ -7,7 +7,8 @@
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
-    "serve": "webpack serve"
+    "serve": "webpack serve",
+    "backend": "node ./fileService"
   },
   "dependencies": {
     "formidable": "^2.0.0-canary.20200504.1",
