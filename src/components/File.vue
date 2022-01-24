@@ -2,12 +2,12 @@
   <div class="file" :style="cssProps">
     <p v-if="caption" class="caption">{{caption}}</p>
     <div class="file-value">
-      <FileLink v-for="(file, index) in value"
+      <FileLink v-for="(file, index) in modelValue"
                 v-bind:index="index"
                 v-bind:key="file.name + index"
                 v-bind:file="file"
                 v-on:remove-file="removeFile">
-        <span v-if="index !== value.length - 1 ">;</span>
+        <span v-if="index !== modelValue.length - 1 ">;</span>
       </FileLink>
     </div>
     <label class="file-select-button">
@@ -21,7 +21,7 @@
 import FileLink from './FileLink.vue'
 export default {
   name: 'File',
-  props: ['value', 'multiple', 'caption', 'width'],
+  props: ['modelValue', 'multiple', 'caption', 'width'],
   computed: {
     cssProps: function () {
       return {
@@ -34,13 +34,14 @@ export default {
       const selectedFile = event.target.files[0]
       console.log(selectedFile)
       if (this.multiple) {
-        this.$emit('input', this.value.concat([selectedFile]))
+        this.$emit('update:modelValue', this.modelValue.concat([selectedFile]))
       } else {
-        this.$emit('input', [selectedFile])
+        this.$emit('update:modelValue', [selectedFile])
       }
     },
     removeFile(index) {
-      this.value.splice(index, 1)
+      this.modelValue.splice(index, 1)
+      this.$emit('update:modelValue', this.modelValue)
     }
   },
   components: {FileLink}

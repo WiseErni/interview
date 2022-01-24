@@ -4,7 +4,7 @@
       <input type="button" class="toolbar-button" @click="save" value="Сохранить"/>
     </div>
     <div class="form-controls">
-      <File v-model="files" caption="Вложения:" width="300" multiple="true"></File>
+      <File v-model="files" @update:model-value="save" caption="Вложения:" width="300" multiple="true"></File>
     </div>
   </div>
 </template>
@@ -37,9 +37,6 @@ export default {
   },
   mounted () {
     this.load()
-  },
-  updated () {
-    // this.save()
   }
 }
 </script>

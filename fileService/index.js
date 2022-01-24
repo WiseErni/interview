@@ -29,7 +29,13 @@ const _saveFiles = async function ({ id, newFiles = {}, restFiles = [] }) {
 
     for (let name of Object.keys(newFiles)) {
       let chunks = ''
-      const read = fs.createReadStream(newFiles[name].path)
+      let read
+      try {
+        read = fs.createReadStream(newFiles[name].filepath)
+      } catch (e) {
+        console.error(e)
+        return
+      }
       const _readPromise = new Promise(resolve => {
         read.on('data', (chunk) => {
           chunks += chunk
@@ -40,10 +46,10 @@ const _saveFiles = async function ({ id, newFiles = {}, restFiles = [] }) {
       })
       await _readPromise
       _fArray.push({
-        name: newFiles[name].name,
+        name,
         size: newFiles[name].size,
         content: Buffer.from(chunks),
-        type: newFiles[name].type,
+        type: newFiles[name].mimetype,
         document: id
       })
     }
