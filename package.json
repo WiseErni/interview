@@ -11,12 +11,12 @@
     "backend": "node ./fileService"
   },
   "dependencies": {
+    "@vue/compiler-sfc": "^3.2.12",
     "formidable": "^2.0.0-dev.20200131.2",
     "sequelize": "^6.6.5",
     "sqlite3": "^5.0.2",
     "vue": "^3.2.12",
-    "vue-loader": "^16.5.0",
-    "@vue/compiler-sfc": "^3.2.12"
+    "vue-loader": "^16.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
